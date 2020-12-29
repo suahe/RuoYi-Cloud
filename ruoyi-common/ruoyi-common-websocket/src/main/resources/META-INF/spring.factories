@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.ruoyi.common.websocket.configure.WebSocketAutoConfiguration,\
+  com.ruoyi.common.websocket.service.WebSocketService

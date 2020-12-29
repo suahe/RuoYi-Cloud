@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.courseAdmin.mapper.SectionMapper">
+    
+    <resultMap type="Section" id="SectionResult">
+        <result property="id"    column="id"    />
+        <result property="title"    column="title"    />
+        <result property="courseId"    column="course_id"    />
+        <result property="chapterId"    column="chapter_id"    />
+        <result property="video"    column="video"    />
+        <result property="time"    column="time"    />
+        <result property="charge"    column="charge"    />
+        <result property="sort"    column="sort"    />
+        <result property="createdAt"    column="created_at"    />
+        <result property="updatedAt"    column="updated_at"    />
+        <result property="vod"    column="vod"    />
+    </resultMap>
+
+    <sql id="selectSectionVo">
+        select id, title, course_id, chapter_id, video, time, charge, sort, created_at, updated_at, vod from section
+    </sql>
+
+    <select id="selectSectionList" parameterType="Section" resultMap="SectionResult">
+        <include refid="selectSectionVo"/>
+        <where>  
+            <if test="title != null  and title != ''"> and title = #{title}</if>
+            <if test="video != null  and video != ''"> and video = #{video}</if>
+            <if test="time != null "> and time = #{time}</if>
+            <if test="charge != null  and charge != ''"> and charge = #{charge}</if>
+            <if test="chapterId != null  and chapterId != ''"> and chapter_id = #{chapterId}</if>
+        </where>
+    </select>
+    
+    <select id="selectSectionById" parameterType="String" resultMap="SectionResult">
+        <include refid="selectSectionVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertSection" parameterType="Section">
+        insert into section
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="courseId != null">course_id,</if>
+            <if test="chapterId != null">chapter_id,</if>
+            <if test="video != null and video != ''">video,</if>
+            <if test="time != null">time,</if>
+            <if test="charge != null and charge != ''">charge,</if>
+            <if test="sort != null">sort,</if>
+            <if test="createdAt != null">created_at,</if>
+            <if test="updatedAt != null">updated_at,</if>
+            <if test="vod != null">vod,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="courseId != null">#{courseId},</if>
+            <if test="chapterId != null">#{chapterId},</if>
+            <if test="video != null and video != ''">#{video},</if>
+            <if test="time != null">#{time},</if>
+            <if test="charge != null and charge != ''">#{charge},</if>
+            <if test="sort != null">#{sort},</if>
+            <if test="createdAt != null">#{createdAt},</if>
+            <if test="updatedAt != null">#{updatedAt},</if>
+            <if test="vod != null">#{vod},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSection" parameterType="Section">
+        update section
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="title != null and title != ''">title = #{title},</if>
+            <if test="courseId != null">course_id = #{courseId},</if>
+            <if test="chapterId != null">chapter_id = #{chapterId},</if>
+            <if test="video != null and video != ''">video = #{video},</if>
+            <if test="time != null">time = #{time},</if>
+            <if test="charge != null and charge != ''">charge = #{charge},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="createdAt != null">created_at = #{createdAt},</if>
+            <if test="updatedAt != null">updated_at = #{updatedAt},</if>
+            <if test="vod != null">vod = #{vod},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSectionById" parameterType="String">
+        delete from section where id = #{id}
+    </delete>
+
+    <delete id="deleteSectionByIds" parameterType="String">
+        delete from section where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

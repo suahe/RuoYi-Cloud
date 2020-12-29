@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.courseAdmin.mapper.TeacherMapper">
+    
+    <resultMap type="Teacher" id="TeacherResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="nickname"    column="nickname"    />
+        <result property="image"    column="image"    />
+        <result property="position"    column="position"    />
+        <result property="motto"    column="motto"    />
+        <result property="intro"    column="intro"    />
+    </resultMap>
+
+    <sql id="selectTeacherVo">
+        select id, name, nickname, image, position, motto, intro from teacher
+    </sql>
+
+    <select id="selectTeacherList" parameterType="Teacher" resultMap="TeacherResult">
+        <include refid="selectTeacherVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="nickname != null  and nickname != ''"> and nickname like concat('%', #{nickname}, '%')</if>
+            <if test="position != null  and position != ''"> and position = #{position}</if>
+        </where>
+    </select>
+    
+    <select id="selectTeacherById" parameterType="Long" resultMap="TeacherResult">
+        <include refid="selectTeacherVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertTeacher" parameterType="Teacher" useGeneratedKeys="true" keyProperty="id">
+        insert into teacher
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">name,</if>
+            <if test="nickname != null and nickname != ''">nickname,</if>
+            <if test="image != null and image != ''">image,</if>
+            <if test="position != null and position != ''">position,</if>
+            <if test="motto != null and motto != ''">motto,</if>
+            <if test="intro != null and intro != ''">intro,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="nickname != null and nickname != ''">#{nickname},</if>
+            <if test="image != null and image != ''">#{image},</if>
+            <if test="position != null and position != ''">#{position},</if>
+            <if test="motto != null and motto != ''">#{motto},</if>
+            <if test="intro != null and intro != ''">#{intro},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTeacher" parameterType="Teacher">
+        update teacher
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="nickname != null and nickname != ''">nickname = #{nickname},</if>
+            <if test="image != null and image != ''">image = #{image},</if>
+            <if test="position != null and position != ''">position = #{position},</if>
+            <if test="motto != null and motto != ''">motto = #{motto},</if>
+            <if test="intro != null and intro != ''">intro = #{intro},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTeacherById" parameterType="Long">
+        delete from teacher where id = #{id}
+    </delete>
+
+    <delete id="deleteTeacherByIds" parameterType="String">
+        delete from teacher where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectAll" resultMap="TeacherResult">
+        <include refid="selectTeacherVo"/>
+    </select>
+    
+</mapper>
